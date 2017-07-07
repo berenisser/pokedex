@@ -1,7 +1,32 @@
+*{
+	box-sizing: border-box;
+	padding: 0;
+}
+.contenedor-cada-pokemon h1{
+	font-size: 25px;
+}
+
 input{
 	width: 100%;
 }
 
 .electric{
 	background-color: yellow;
+}
+
+.contenedor-cada-pokemon{
+	background-color: lightgray;
+	width: 160px;
+	margin: 10px;
+	box-sizing: border-box;
+	cursor: pointer;
+
+}
+
+#contenerdor-pokemon{
+	margin: 0 auto;
+}
+
+.capitalizar{
+    text-transform:capitalize;
 }

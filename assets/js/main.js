@@ -1,6 +1,6 @@
 $(document).ready(function(){
 
-    //Primer link API cada uno de los pokemons
+    /*Primer link API cada uno de los pokemons
     $("#btn-go").click(function(event){
         console.log("Entro");
         $("#contenedor-pokemon").empty();
@@ -16,23 +16,23 @@ $(document).ready(function(){
             console.log(pokeName);
             console.log(pokeID);
             console.log(pokeType);
+
             var sprites = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";  //25.png
             var espacio = '<div class="color-espacio col-md-3" id="div-color"><img src="'+ sprites+pokeID+'.png"><h1>' + pokeName + '</h1></div>';
             //var li = '<h1>' + pokeName + '</h1>';
             //var foto = '<img src="'+ sprites+pokeID+'.png">'
-            if(pokeType == "electric"){
-                 $("#div-color").addClass("electric");
-            }
+            
 
             $("#contenedor-pokemon").append(espacio);
+             if(pokeType == "electric"){
+                 $("#div-color").addClass("electric");
+            }
         });
         
     });
 
-    /*segundo link API todos los pokemons
-     $(window).load(function() {
-        todosAjax(data);
-    }); */
+    /*segundo link API todos los pokemons */
+
 
     (function(){
         console.log("Load");
@@ -43,82 +43,97 @@ $(document).ready(function(){
             var allPokeId = element.entry_number;
             var allPokeName = element.pokemon_species.name;
             var sprites = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"; 
-            $("#contenedor-pokemon").append('<div class="color-espacio col-md-3 col-sm-6 col-xs-6"><img src="'+ sprites+allPokeId+'.png"><h1>' + allPokeName+ '</h1></div>');    
+            $("#contenedor-pokemon").append('<div class="color-espacio text-center contenedor-cada-pokemon col-md-2 col-sm-4 col-xs-4" data-toggle="modal" id="'+allPokeName+'" data-target=".'+allPokeName+'"><img src="'+ sprites+allPokeId+'.png"><h1 class="modal-title capitalizar">' + allPokeName+ '</h1><input type="text" value="' + allPokeName+ '" hidden="true"></div>').append(crearContenidoModal(allPokeName, allPokeId));    
             });
         });
-    })();
+    })(); 
 
-   
+$(".contenedor-cada-pokemon").click(function() {
+    alert("click dentro");
+     //console.log($(".contenedor-cada-pokemon").find($("input").val()));
+});
 
+    function cadaPokemonInfo(){
+        $(".contenedor-cada-pokemon").find($("input").val());
 
+    var nombrePok;
+    var pokeURL = "http://pokeapi.co/api/v2/pokemon/" + nombrePok;
 
-    /*function pokeSubmit(){
-        var param = $("#pokeInput").val();
-        var pokeURL = "http://pokeapi.co/api/v1/pokemon/" + param;
-        var pokeURL2 = "http://pokeapi.co/api/v2/pokemon/" + param;
+        $.getJSON(pokeURL, function(data2){
+            var pokeName = data2.name;
+            var pokeID = data2.id;
+            var pokeType = data2.types[0].type.name;
+            console.log(pokeName);
+            console.log(pokeID);
+            console.log(pokeType);
 
-        $.getJSON(pokeURL, function(data){
-            //console.log(data);
-            //var pokeID = data.national_id;
-            var pokeName = data.name;
-            var li = '<h1>#' + pokeName + '</h1>';
-            $("#pokeDetails").append(li);
+            var sprites = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/";  //25.png
+            var espacio = '<div class="color-espacio col-md-3" id="div-color"><img src="'+ sprites+pokeID+'.png"><h1>' + pokeName + '</h1></div>';
+            //var li = '<h1>' + pokeName + '</h1>';
+            //var foto = '<img src="'+ sprites+pokeID+'.png">'
+            
 
-
-            var pokeType1 = data.types[0].name;
-            if (data.types.length == 2) {
-                var pokeType2 = data.types[1].name;
+            $("#contenedor-pokemon").append(espacio);
+             if(pokeType == "electric"){
+                 $("#div-color").addClass("electric");
             }
-            else var pokeType2 = null;
-            var descriptionURI = "http://pokeapi.co" + data.descriptions[0].resource_uri;
-            var pokeDescription = "";
-
-            $.getJSON(descriptionURI, function(data2){
-                //console.log(data2);
-                pokeDescription = data2.description;
-            }); 
-
-            $.getJSON(pokeURL2, function(data3){
-                //console.log(data3);
-
-                 //console.log(JSON.stringify(data, null, "  "));
-                var imageURI = data3.sprites.front_default;
-
-                console.log("Number: ", pokeID);
-                console.log("Name: ", pokeName);
-                console.log("Type 1: ", pokeType1);
-                console.log("Type 2: ", pokeType2);
-                console.log("Description URI: ", descriptionURI);
-                console.log("Description: ", pokeDescription);
-                console.log("Image URI: ", imageURI);
-
-                // append data to HTML
-                // empty string to hold HTML
-                var li = "";
-                li += '<li><img src="' + imageURI + '">';
-                li += '<h1>#' + pokeID + ' ' + pokeName + '</h1>';
-                li += '<p>Type 1: ' + pokeType1 + '</p>';
-
-                // only display Type 2 if it is not null
-                if (pokeType2 != null){
-                    li += '<p>Type 2: ' + pokeType2 + '</p>';
-                }
-
-                li += '<p>' + pokeDescription + '</p>';
-                li += '</li>';
-
-                // empty the listview
-                $("#pokeDetails").empty();
-
-                // append new li to listview
-                $("#pokeDetails").append(li).promise().done(function(){
-                        $(this).listview("refresh");
-                });
-
-            }); 
-
         });
-    } */
+    }
+
+
+    function crearContenidoModal(allPokeName, allPokeId){
+        var sprites = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"; 
+        var modal ='<div class="modal fade '+allPokeName+'" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">'+
+                    '<div class="modal-dialog" role="document">'+
+                        '<div class="modal-content">'+
+                            '<div class="modal-header">'+
+                                '<h1 class="capitalizar">'+allPokeName+'</h1>'+
+                            '</div>'+
+                            '<div class="modal-body">'+
+                                '<div class="row">'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-6">'+
+                                        '<img src="'+ sprites+allPokeId+'.png">'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>';
+        return modal;
+    };
+
+
+
+    $("#btn-go").click(function(event){
+        console.log("boton clk");
+        var valor = $("#pokeInput").val();
+        console.log(valor);
+        $('#contenedor-pokemon').find($("#"+valor)).css("background-color","green");
+
+    }); 
+
+
+    /*
+    //Switch
+            var jsLang = 'jquery';
+            switch (jsLang) { 
+                case 'jquery': 
+                    alert('jQuery Wins!');
+                    break;
+                case 'prototype': 
+                    alert('prototype Wins!');
+                    break;
+                case 'mootools': 
+                    alert('mootools Wins!');
+                    break;      
+                case 'dojo': 
+                    alert('dojo Wins!');
+                    break;
+                default:
+                    alert('Nobody Wins!');
+            }
+
+    */
          
 
 })
