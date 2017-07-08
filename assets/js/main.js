@@ -31,8 +31,8 @@ $(document).ready(function(){
         
     });
 
-    /*segundo link API todos los pokemons */
 
+    /*Esta funcion recorre el gran listado de pokemons y escribe su nombre y foto */
 
     (function(){
         console.log("Load");
@@ -43,26 +43,48 @@ $(document).ready(function(){
             var allPokeId = element.entry_number;
             var allPokeName = element.pokemon_species.name;
             var sprites = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"; 
-            $("#contenedor-pokemon").append('<div class="color-espacio text-center contenedor-cada-pokemon col-md-2 col-sm-4 col-xs-4" data-toggle="modal" id="'+allPokeName+'" data-target=".'+allPokeName+'"><img src="'+ sprites+allPokeId+'.png"><h1 class="modal-title capitalizar">' + allPokeName+ '</h1><input type="text" value="' + allPokeName+ '" hidden="true"></div>').append(crearContenidoModal(allPokeName, allPokeId));    
+            $("#contenedor-pokemon").append(crearContenidoModal(allPokeName, allPokeId));    
             });
         });
     })(); 
 
-$(".contenedor-cada-pokemon").click(function() {
-    alert("click dentro");
-     //console.log($(".contenedor-cada-pokemon").find($("input").val()));
-});
 
-    function cadaPokemonInfo(){
-        $(".contenedor-cada-pokemon").find($("input").val());
 
-    var nombrePok;
-    var pokeURL = "http://pokeapi.co/api/v2/pokemon/" + nombrePok;
+    function crearContenidoModal(allPokeName, allPokeId){
+        var sprites = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"; 
+        var modal ='<div class="color-espacio text-center contenedor-cada-pokemon col-md-2 col-sm-4 col-xs-4" onclick="cadaPokemonInfo(this)" data-toggle="modal" id="'+allPokeName+'" data-target=".'+allPokeName+'"><img src="'+ sprites+allPokeId+'.png"><h1 class="modal-title capitalizar">' + allPokeName+ '</h1><input type="text" value="' + allPokeName+ '" hidden="true"></div><div class="modal fade '+allPokeName+'" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">'+
+                    '<div class="modal-dialog" role="document">'+
+                        '<div class="modal-content">'+
+                            '<div class="modal-header">'+
+                                '<h1 class="capitalizar">'+allPokeName+'</h1>'+
+                            '</div>'+
+                            '<div class="modal-body">'+
+                                '<div class="row">'+
+                                    '<div class="col-md-6 col-sm-6 col-xs-6">'+
+                                        '<img src="'+ sprites+allPokeId+'.png">'+
+                                    '</div>'+
+                                    '<div class="col-md-3 col-sm-3 col-xs-3">'+
+                                        '<h2>Pokemon #'+allPokeId+'</h2>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>';
+        return modal;
+    };
 
-        $.getJSON(pokeURL, function(data2){
-            var pokeName = data2.name;
-            var pokeID = data2.id;
-            var pokeType = data2.types[0].type.name;
+    //ESta funcion deberia poder tomar el nombre del pokemon seleccionado y completar el API del pokemon en especificio
+    function cadaPokemonInfo(e){
+        console.log(e.id);
+
+        var nombrePok = e.id;
+        var pokeURL = "http://pokeapi.co/api/v2/pokemon/" + nombrePok;
+
+        $.getJSON(pokeURL, function(data){
+            var pokeName = data.name;
+            var pokeID = data.id;
+            var pokeType = data.types[0].type.name;
             console.log(pokeName);
             console.log(pokeID);
             console.log(pokeType);
@@ -75,35 +97,14 @@ $(".contenedor-cada-pokemon").click(function() {
 
             $("#contenedor-pokemon").append(espacio);
              if(pokeType == "electric"){
-                 $("#div-color").addClass("electric");
+                 $(".contenedor-cada-pokemon").css("background-color","yellow");
             }
         });
     }
 
 
-    function crearContenidoModal(allPokeName, allPokeId){
-        var sprites = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/"; 
-        var modal ='<div class="modal fade '+allPokeName+'" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel">'+
-                    '<div class="modal-dialog" role="document">'+
-                        '<div class="modal-content">'+
-                            '<div class="modal-header">'+
-                                '<h1 class="capitalizar">'+allPokeName+'</h1>'+
-                            '</div>'+
-                            '<div class="modal-body">'+
-                                '<div class="row">'+
-                                    '<div class="col-md-6 col-sm-6 col-xs-6">'+
-                                        '<img src="'+ sprites+allPokeId+'.png">'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>'+
-                        '</div>'+
-                    '</div>'+
-                '</div>';
-        return modal;
-    };
 
-
-
+    //Funcion buscador
     $("#btn-go").click(function(event){
         console.log("boton clk");
         var valor = $("#pokeInput").val();
